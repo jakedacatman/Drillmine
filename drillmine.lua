@@ -5,7 +5,12 @@ if #args > 2 then
     return
 end
 -- Define varables
-local depth2dig = tonumber(args[1]) - 5 or {gps.locate(5)}[2]
+local depth2dig
+if not args[1] then 
+    depth2dig = {gps.locate(5)}[2] - 5
+else
+    depth2dig = tonumber(args[1]) - 5
+end
 local debug = false
 local use_rednet = false
 if tostring(args[2]) == "true" then use_rednet = true end
