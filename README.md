@@ -1,2 +1,35 @@
 # Drillmine
 Computercraft mining program that detects lava and uses it to refuel
+---------------------------------------
+-- drillmine.lua by valvate --
+-- But why? you ask there are
+-- other drill mining progarms
+-- well this one detects lava
+-- and uses it to refuel
+-- don't worry about running out of fuel
+-- he automaticaly checks his fuel level
+-- and tells you if he has enough fuel
+-- for another trip!
+
+-- WARNING IF HIS CHUNK UNLOADS
+-- HE WILL STOP AND NEVER COME BACK
+----------------------------------------
+-- Usage:
+-- Simply place an empty bucket in his 16th slot
+-- And run the script
+-- eg drillmine 68
+-- "68" is the turtles y coradanite
+-- WARNING if you put something lower then his Y
+-- Then he might get stuck in bedrock
+----------------------------------------
+-- TODO
+-- Create custom move function that deals
+-- with falling blocks and
+-- keeps track of y posision
+-- create config file and
+-- create startup file so he can keep
+-- going even if the chunk unloads
+-- add gps support so you don't need to
+-- give it its y every time
+-- clean up the code its ugly af rn
+--------------------------------------
