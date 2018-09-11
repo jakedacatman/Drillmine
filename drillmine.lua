@@ -5,15 +5,13 @@ if #args > 2 then
     return
 end
 -- Define varables
-local depth2dig
-if not args[1] then 
-    depth2dig = {gps.locate(5)}[2] - 5
-else
-    depth2dig = tonumber(args[1]) - 5
-end
+local x, y, z = gps.locate(5)
+local depth2dig = tonumber(args[1]) or y
+--bedrock
+depth2dig = depth2dig - 5
 local debug = false
 local use_rednet = false
-if tostring(args[2]) == "true" then use_rednet = true end
+if tostring(args[1]) == "true" or tostring(args[2]) == "true" then use_rednet = true end
 local vals = {
     'minecraft:diamond_ore',
     'minecraft:iron_ore',
@@ -23,9 +21,9 @@ local vals = {
     'minecraft:emerald_ore',
     'quark:biotite_ore'
 }
-
+ 
 -- Print Functions
-
+ 
 function printDebug(message)
     if debug then
         term.setTextColor(term.isColor() and colors.gray or colors.white)
@@ -36,8 +34,8 @@ function printDebug(message)
         end
     end
 end
-
-
+ 
+ 
 function printInfo(message)
     term.setTextColor(term.isColor() and colors.blue or colors.white)
     print("[INFO]: "..message)
@@ -46,7 +44,7 @@ function printInfo(message)
     end
     term.setTextColor(colors.white)
 end
-
+ 
 function printError(message)
     term.setTextColor(term.isColor() and colors.red or colors.white)
     print("[ERROR]: "..message)
@@ -56,7 +54,7 @@ function printError(message)
     term.setTextColor(colors.white)
 end
 -- End print functions
-
+ 
 function checkfuel()
     -- Check if we have enough fuel for a run
     if turtle.getFuelLevel() <= (depth2dig * 2) + 3 then
@@ -64,7 +62,7 @@ function checkfuel()
         error()
     end
 end
-
+ 
 function process_block()
     local _,block = turtle.inspect()
     if block.name then
@@ -93,10 +91,9 @@ checkfuel()
 printInfo('Going down...')
 local actualDepth = 0
 for i=1,depth2dig do
-        turtle.digDown()
-        turtle.down()
-        actualDepth = actualDepth + 1
-    end
+    turtle.digDown()
+    turtle.down()
+    actualDepth = actualDepth + 1
     for i=1,3 do
         -- This should start with a check and end with a check but i'm not sure how do to it
         -- So i've used this ugly method
@@ -120,8 +117,9 @@ for i=1,3 do
 end
 printInfo('Going up')
 for i=1,actualDepth do
-        turtle.digUp()
-        turtle.up()
+    turtle.digUp()
+    turtle.up()
+    process_block()
     for i=1,3 do
         -- This should start with a check and end with a check but i'm not sure how do to it
         -- So i've used this ugly method
@@ -137,3 +135,5 @@ for i=1,actualDepth do
     actualDepth = 0
 end
 printInfo('Returned to surface!')
+--so you can assess the damage
+turtle.forward()
