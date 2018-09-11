@@ -7,6 +7,7 @@ end
 -- Define varables
 local depth2dig = tonumber(args[1]) - 5
 local debug = false
+local use_rednet = true
 local vals = {
     'minecraft:diamond_ore',
     'minecraft:iron_ore',
@@ -24,7 +25,9 @@ function printDebug(message)
         term.setTextColor(term.isColor() and colors.gray or colors.white)
         print("[DEBUG]: "..message)
         term.setTextColor(colors.white)
-        rednet.broadcast('[DEBUG]: '..message)
+        if use_rednet then
+            rednet.broadcast('[DEBUG]: '..message)
+        end
     end
 end
 
@@ -32,14 +35,18 @@ end
 function printInfo(message)
     term.setTextColor(term.isColor() and colors.blue or colors.white)
     print("[INFO]: "..message)
-    rednet.broadcast('[INFO]: '..message)
+    if use_rednet then
+        rednet.broadcast('[INFO]: '..message)
+    end
     term.setTextColor(colors.white)
 end
 
 function printError(message)
     term.setTextColor(term.isColor() and colors.blue or colors.white)
     print("[ERROR]: "..message)
-    rednet.broadcast('[ERROR]: '..message)
+    if use_rednet then
+        rednet.broadcast('[ERROR]: '..message)
+    end
     term.setTextColor(colors.white)
 end
 -- End print functions
