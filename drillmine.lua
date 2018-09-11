@@ -1,13 +1,14 @@
 -- Manage args --
 local args = { ... }
-if #args ~= 1 then
-    print('Usage: drillmine <CurrentY>')
+if #args > 2 then
+    print('Usage: drillmine [CurrentY] [use_rednet]')
     return
 end
 -- Define varables
-local depth2dig = tonumber(args[1]) - 5
+local depth2dig = tonumber(args[1]) - 5 or {gps.locate(5)}[2]
 local debug = false
 local use_rednet = false
+if tostring(args[2]) == "true" then use_rednet = true end
 local vals = {
     'minecraft:diamond_ore',
     'minecraft:iron_ore',
@@ -85,12 +86,11 @@ end
 printDebug('depth2dig set to: '..depth2dig)
 checkfuel()
 printInfo('Going down...')
+local actualDepth = 0
 for i=1,depth2dig do
-    if turtle.detectDown() then
         turtle.digDown()
         turtle.down()
-    else
-        turtle.down()
+        actualDepth = actualDepth + 1
     end
     for i=1,3 do
         -- This should start with a check and end with a check but i'm not sure how do to it
@@ -114,13 +114,9 @@ for i=1,3 do
   turtle.forward()
 end
 printInfo('Going up')
-for i=1,depth2dig do
-    if turtle.detectUp() then
+for i=1,actualDepth do
         turtle.digUp()
         turtle.up()
-    else
-        turtle.up()
-    end
     for i=1,3 do
         -- This should start with a check and end with a check but i'm not sure how do to it
         -- So i've used this ugly method
@@ -132,5 +128,7 @@ for i=1,depth2dig do
     if i%10 == 0 then
       printInfo('At depth '..i)
     end
+--just to be sure
+    actualDepth = 0
 end
 printInfo('Returned to surface!')
