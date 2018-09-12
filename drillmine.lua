@@ -62,7 +62,7 @@ function checkfuel()
         error()
     end
 end
- 
+local foundLava = false
 function process_block()
     local _,block = turtle.inspect()
     if block.name then
@@ -71,12 +71,13 @@ function process_block()
          if block.name == vals[i] then
             printInfo('Found '..block.name)
             turtle.dig()
-        elseif block.name == 'minecraft:lava' then
-            printInfo('Found lava refueling...')
+        elseif block.name == 'minecraft:lava' and not foundLava then
+            printInfo('Found lava, refueling...')
             turtle.select(16)
             turtle.place()
             turtle.refuel(1)
-            printDebug('Fuel level is '..turtle.getFuelLevel())
+            printDebug('Fuel level is '..turtle.getFuelLevel())   
+            foundLava = true
         end
     end
     end
@@ -97,11 +98,12 @@ for i=1,depth2dig do
     for i=1,3 do
         -- This should start with a check and end with a check but i'm not sure how do to it
         -- So i've used this ugly method
-        process_block()
+        process_block()       
         turtle.turnRight()
     end
     -- This is ugly but faster i hope i can find a cleaner way
     process_block()
+    foundLava = false
     if i%10 == 0 then
       printInfo('at depth '..i)
     end
@@ -128,6 +130,7 @@ for i=1,actualDepth do
     end
     -- This is ugly but faster i hope i can find a cleaner way
     process_block()
+    foundLava = false
     if i%10 == 0 then
       printInfo('At depth '..i)
     end
